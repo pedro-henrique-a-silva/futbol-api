@@ -13,6 +13,12 @@ const allTeamsFromDB = [
   },
 ]
 
+const teamFromDB = {
+  id: 3,
+  teamName: "Botafogo"
+}
+
 export default {
   allTeamsFromDB,
+  teamFromDB
 }
