@@ -7,8 +7,8 @@ import JWT from '../utils/JWT';
 
 export default class UsersService {
   private invalidDataResponse: ServiceResponseError = {
-    status: 'INVALID_DATA',
-    data: { message: 'Invalid Data' },
+    status: 'UNAUTHORIZED',
+    data: { message: 'Invalid email or password' },
   };
 
   constructor(
