@@ -21,13 +21,21 @@ export default class UsersService {
     password: string,
   ): Promise<ServiceResponse<IUser | { token: string }>> {
     const user = await this.usersModel.findByEmail(email);
+
     if (!user) return this.invalidDataResponse;
+
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) return this.invalidDataResponse;
 
-    const token = this.jwtService.sign({ email: user.email, role: user.role });
+    const token = this.jwtService.sign({ email: user.email });
 
     return { status: 'SUCCESSFUL', data: { token } };
+  }
+
+  public async getRole(email: string): Promise<ServiceResponse<{ role: string }>> {
+    const user = await this.usersModel.findByEmail(email);
+
+    return { status: 'SUCCESSFUL', data: { role: user?.role as string } };
   }
 }
