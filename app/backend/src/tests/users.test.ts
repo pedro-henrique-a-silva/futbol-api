@@ -16,11 +16,11 @@ const { app } = new App();
 describe('Testando rotas de Users', () => {
   let chaiHttpResponse: Response;
 
-  it('POST /users Deve retornar um token com status 200', async () => {
+  it('POST /login Deve retornar um token com status 200', async () => {
     sinon.stub(SequelizeUsers, 'findOne').resolves(mocks.userFromDB as any);
     const { email, password } = mocks.userLoginBody
     
-    const { status, body } = await chai.request(app).post('/users')
+    const { status, body } = await chai.request(app).post('/login')
       .send({ email, password });
     
     expect(status).to.equal(200);
@@ -28,11 +28,11 @@ describe('Testando rotas de Users', () => {
     expect(body.token).to.be.an('string');
   });
 
-  it('POST /users Deve retornar status 400 sem email', async () => {
+  it('POST /login Deve retornar status 400 sem email', async () => {
     sinon.stub(SequelizeUsers, 'findOne').resolves(mocks.userFromDB as any);
     const { email, password } = mocks.userLoginBody
     
-    const { status, body } = await chai.request(app).post('/users')
+    const { status, body } = await chai.request(app).post('/login')
       .send({ password });
     
     expect(status).to.equal(400);
@@ -40,11 +40,11 @@ describe('Testando rotas de Users', () => {
     expect(body.message).to.be.an('string');
   });
 
-  it('POST /users Deve retornar status 400 sem password', async () => {
+  it('POST /login Deve retornar status 400 sem password', async () => {
     sinon.stub(SequelizeUsers, 'findOne').resolves(mocks.userFromDB as any);
     const { email, password } = mocks.userLoginBody
     
-    const { status, body } = await chai.request(app).post('/users')
+    const { status, body } = await chai.request(app).post('/login')
       .send({ email });
     
     expect(status).to.equal(400);
@@ -52,26 +52,26 @@ describe('Testando rotas de Users', () => {
     expect(body.message).to.be.an('string');
   });
 
-  it('POST /users Deve retornar status 400 com usúario inválido', async () => {
+  it('POST /login Deve retornar status 401 com usúario inválido', async () => {
     sinon.stub(SequelizeUsers, 'findOne').resolves(null);
     const { email, password } = mocks.userLoginBody
     
-    const { status, body } = await chai.request(app).post('/users')
+    const { status, body } = await chai.request(app).post('/login')
       .send({ email, password });
     
-    expect(status).to.equal(400);
+    expect(status).to.equal(401);
     expect(body).to.have.property('message');
     expect(body.message).to.be.an('string');
   });
 
-  it('POST /users Deve retornar status 400 com usúario válido e senha incorreta', async () => {
+  it('POST /login Deve retornar status 400 com usúario válido e senha incorreta', async () => {
     sinon.stub(SequelizeUsers, 'findOne').resolves(mocks.userFromDB as any);
     const { email, password } = mocks.userLoginBody
     
-    const { status, body } = await chai.request(app).post('/users')
+    const { status, body } = await chai.request(app).post('/login')
       .send({ email, password: 'senha_incorreta' });
     
-    expect(status).to.equal(400);
+    expect(status).to.equal(401);
     expect(body).to.have.property('message');
     expect(body.message).to.be.an('string');
   });
