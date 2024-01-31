@@ -16,4 +16,14 @@ export default class UsersController {
 
     return res.status(code).json(data);
   }
+
+  public async getRole(req: Request, res: Response) {
+    const { email } = res.locals.auth;
+
+    const { status, data } = await this.usersService.getRole(email);
+
+    const code = mapStatusHTTP(status);
+
+    return res.status(code).json(data);
+  }
 }
