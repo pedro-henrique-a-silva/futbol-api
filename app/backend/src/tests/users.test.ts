@@ -78,46 +78,45 @@ describe('Testando rotas de Users', () => {
     expect(body.message).to.be.an('string');
   });
 
-  it('POST /login/role com token valído retornar status 200 com um objeto contendo a role do user', async () => {
+  it('GET /login/role com token valído retornar status 200 com um objeto contendo a role do user', async () => {
     sinon.stub(SequelizeUsers, 'findOne').resolves(mocks.userFromDB as any);
-    sinon.stub(JWT, 'verify').resolves("token_valido");
+    sinon.stub(JWT, 'verify').returns('valideToken');
 
     const { email, password } = mocks.userLoginBody
     
-    const { status, body } = await chai.request(app).post('/login/role')
-      .set('authorization', 'validToken')
+    const { status, body } = await chai.request(app).get('/login/role')
+      .set('authorization', 'Bearer validToken')
       .send({ email, password });
     
     expect(status).to.equal(200);
     expect(body).to.have.property('role');
-    expect(body.message).to.be.an('string');
+    expect(body.role).to.be.an('string');
   });
 
-  it('POST /login/role sem token retornar status 401 com a mensagem de erro correta', async () => {
+  it('GET /login/role sem token retornar status 401 com a mensagem de erro correta', async () => {
     sinon.stub(SequelizeUsers, 'findOne').resolves(mocks.userFromDB as any);
 
     const { email, password } = mocks.userLoginBody
     
-    const { status, body } = await chai.request(app).post('/login/role')
+    const { status, body } = await chai.request(app).get('/login/role')
       .send({ email, password });
     
     expect(status).to.equal(401);
-    expect(body).to.have.property('role');
     expect(body.message).to.be.an('string');
     expect(body.message).to.equal('Token not found');
   });
 
-  it('POST /login/role com token inválido retornar status 401 com a mensagem de erro correta', async () => {
-    sinon.stub(SequelizeUsers, 'findOne').resolves(mocks.userFromDB as any);
-    sinon.stub(JWT, 'verify').resolves("Token must be a valid token");
+  it('GET /login/role com token inválido retornar status 401 com a mensagem de erro correta', async () => {
+    // sinon.stub(SequelizeUsers, 'findOne').resolves(mocks.userFromDB as any);
+    sinon.stub(JWT, 'verify').returns("Token must be a valid token");
 
     const { email, password } = mocks.userLoginBody
     
-    const { status, body } = await chai.request(app).post('/login/role')
+    const { status, body } = await chai.request(app).get('/login/role')
+      .set('authorization', 'Bearer invalidToken')
       .send({ email, password });
     
-    expect(status).to.equal(200);
-    expect(body).to.have.property('role');
+    expect(status).to.equal(401);
     expect(body.message).to.be.an('string');
     expect(body.message).to.equal('Token must be a valid token');
   });
