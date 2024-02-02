@@ -27,4 +27,8 @@ export default class MatchesModel implements IMatchesModel {
     });
     return matches.map((match) => match.dataValues);
   }
+
+  public async finishMatch(id: string): Promise<void> {
+    await this.model.update({ inProgress: 0 }, { where: { id } });
+  }
 }
