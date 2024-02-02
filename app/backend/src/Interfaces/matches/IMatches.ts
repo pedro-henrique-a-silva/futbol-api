@@ -11,5 +11,5 @@ export interface IAwayTeam {
 }
 
 export interface IMatch extends Identifiable, IHomeTeam, IAwayTeam{
-  inProgress: boolean;
+  inProgress: number;
 }
