@@ -31,4 +31,11 @@ export default class MatchesModel implements IMatchesModel {
   public async finishMatch(id: string): Promise<void> {
     await this.model.update({ inProgress: 0 }, { where: { id } });
   }
+
+  public async updateMatch(
+    id: string,
+    match: { homeTeamGoals: number; awayTeamGoals: number },
+  ): Promise<void> {
+    await this.model.update(match, { where: { id } });
+  }
 }
