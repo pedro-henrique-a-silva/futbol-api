@@ -18,4 +18,10 @@ export default class MatchesService {
 
     return { status: 'SUCCESSFUL', data: matches };
   }
+
+  public async finishMatch(id: string): Promise<ServiceResponse<{ message: string }>> {
+    await this.matchesModel.finishMatch(id);
+
+    return { status: 'SUCCESSFUL', data: { message: 'Finished' } };
+  }
 }
