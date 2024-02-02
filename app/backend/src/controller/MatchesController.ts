@@ -41,4 +41,12 @@ export default class MatchesController {
 
     return res.status(code).json(data);
   }
+
+  public async insertNewMatch(req: Request, res: Response) {
+    const { status, data } = await this.matchesService.insertNewMatch(req.body);
+
+    const code = mapStatusHTTP(status);
+
+    return res.status(code).json(data);
+  }
 }
