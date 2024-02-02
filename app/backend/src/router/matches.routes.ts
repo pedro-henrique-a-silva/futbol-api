@@ -10,6 +10,13 @@ router.get(
   '/',
   (req: Request, res: Response) => matchesController.getAllMatches(req, res),
 );
+
+router.post(
+  '/',
+  Validations.validateToken,
+  (req: Request, res: Response) => matchesController.insertNewMatch(req, res),
+);
+
 router.patch(
   '/:id',
   Validations.validateToken,
