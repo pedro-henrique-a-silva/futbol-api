@@ -38,4 +38,14 @@ export default class MatchesModel implements IMatchesModel {
   ): Promise<void> {
     await this.model.update(match, { where: { id } });
   }
+
+  public async create(match: IMatch): Promise<IMatch> {
+    const inserted = await this.model.create({ ...match, inProgress: 1 });
+    return inserted.dataValues;
+  }
+
+  public async findById(id: number): Promise<IMatch | null> {
+    const match = await this.model.findByPk(id);
+    return match?.dataValues || null;
+  }
 }
