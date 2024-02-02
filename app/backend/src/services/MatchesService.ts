@@ -24,4 +24,13 @@ export default class MatchesService {
 
     return { status: 'SUCCESSFUL', data: { message: 'Finished' } };
   }
+
+  public async updateMatch(
+    id: string,
+    match: { homeTeamGoals: number; awayTeamGoals: number },
+  ): Promise<ServiceResponse<{ message: string }>> {
+    await this.matchesModel.updateMatch(id, match);
+
+    return { status: 'SUCCESSFUL', data: { message: 'Updated' } };
+  }
 }
