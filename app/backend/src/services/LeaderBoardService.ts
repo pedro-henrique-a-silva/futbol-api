@@ -1,4 +1,5 @@
 import { IGamesStatistics,
+  IGoalsStatistics,
   ILeaderBoard } from '../Interfaces/leaderBoard/ILeaderBoard';
 import { ITeamsModel } from '../Interfaces/teams/ITeamsModel';
 import { IMatchesModel } from '../Interfaces/matches/IMatchesModel';
@@ -16,7 +17,23 @@ export default class LeaderBoardService {
     const goalsStatistics = await this.teamsModel.getGolsStatistics('home');
     const gamesStatistics = await this.teamsModel.getGamesStatistics('home');
 
-    const leaderBoard = gamesStatistics.map((match) => {
+    const leaderBoard = LeaderBoardService.getLeaderBoard(gamesStatistics, goalsStatistics);
+    return LeaderBoardService.sortLeaderBoard(leaderBoard);
+  }
+
+  public async getAwayLeaderBoard(): Promise<ILeaderBoard[]> {
+    const goalsStatistics = await this.teamsModel.getGolsStatistics('away');
+    const gamesStatistics = await this.teamsModel.getGamesStatistics('away');
+
+    const leaderBoard = LeaderBoardService.getLeaderBoard(gamesStatistics, goalsStatistics);
+    return LeaderBoardService.sortLeaderBoard(leaderBoard);
+  }
+
+  private static getLeaderBoard(
+    gamesStatistics: IGamesStatistics[],
+    goalsStatistics: IGoalsStatistics[],
+  ): ILeaderBoard[] {
+    return gamesStatistics.map((match) => {
       const goalSData = goalsStatistics.find((goals) => goals.name === match.name);
       return {
         ...match,
@@ -27,7 +44,6 @@ export default class LeaderBoardService {
         efficiency: LeaderBoardService.getEfficiency(match),
       };
     });
-    return LeaderBoardService.sortLeaderBoard(leaderBoard);
   }
 
   private static sortLeaderBoard(leaderBoard: ILeaderBoard[]): ILeaderBoard[] {
