@@ -10,4 +10,9 @@ export default class LeaderBoard {
     const leaderBoard = await this.leaderBoardService.getHomeLeaderBoard();
     res.status(200).json(leaderBoard);
   }
+
+  public async getAwayLeaderBoard(req: Request, res: Response): Promise<void> {
+    const leaderBoard = await this.leaderBoardService.getAwayLeaderBoard();
+    res.status(200).json(leaderBoard);
+  }
 }
